@@ -17,8 +17,8 @@
   };
 </script>
 
-<div class="h-min card w-96 bg-base-200 text-primary-content mr-5">
-  <div class="card-body">
+<div class="h-min  card bg-base-200 text-primary-content mr-5">
+  <div class="card-body w-72">
     {#if showTitleChangeForm}
       <form>
         <input
@@ -39,7 +39,7 @@
       </h2>
     {/if}
     <div id="cards">
-      <Card />
+      <Card list={title} />
     </div>
     <div class="card-actions"><AddCard /></div>
   </div>

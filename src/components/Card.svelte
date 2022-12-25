@@ -6,6 +6,7 @@
   import CardDetails from './CardDetails.svelte';
   import AddCard from './AddCard.svelte';
 
+  export let list;
   export let title = 'Test';
   export let labels = ['in progress'];
   export let description = 'testing';
@@ -13,23 +14,23 @@
   // export let comments;
 
   let editButtonHidden = true;
-  let showCardDetails = true;
+  let hideCardDetails = true;
 
   const setEditButton = (val) => {
     editButtonHidden = val;
   };
 
-  const setShowCardDetails = (val) => {
-    showCardDetails = val;
+  const showCardDetails = () => {
+    hideCardDetails = false;
   };
 </script>
 
 <div
-  class="card bg-base-100 shadow-xl"
+  class="card bg-base-100 shadow-xl cursor-pointer"
   on:mouseenter={() => setEditButton(false)}
   on:mouseleave={() => setEditButton(true)}
-  on:click={() => setShowCardDetails(true)}
-  on:keydown={() => setShowCardDetails(true)}
+  on:click={showCardDetails}
+  on:keydown={showCardDetails}
 >
   <div class="card-body justify-end">
     <div class="flex justify-between items-center">
@@ -49,8 +50,4 @@
   </div>
 </div>
 
-{#if showCardDetails}
-  <CardDetails />
-{:else}
-  <div />
-{/if}
+<CardDetails bind:hidden={hideCardDetails} bind:title {list} />
