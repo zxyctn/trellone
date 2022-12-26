@@ -1,32 +1,65 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+
   import ViewList from 'svelte-bootstrap-icons/lib/ViewList.svelte';
   import JustifyLeft from 'svelte-bootstrap-icons/lib/JustifyLeft.svelte';
   import XLg from 'svelte-bootstrap-icons/lib/XLg.svelte';
 
+  import Confirm from './Confirm.svelte';
   import { clickOutside, focus } from '../helpers/element';
 
   export let hidden = true;
-  export let title;
-  export let list;
+  export let listTitle;
+  export let listId;
+  export let card;
+
+  const dispatch = createEventDispatcher();
+
+  let title = card.title;
+  let description = card.description;
 
   let showTitleChangeForm = false;
+  let hideConfirm = true;
 
   const toggleTitleChangeForm = () => {
     showTitleChangeForm = !showTitleChangeForm;
   };
+
+  const hide = () => {
+    if (hideConfirm) {
+      title = card.title;
+      description = card.description;
+      hidden = true;
+    }
+  };
+
+  const handleSave = () => {
+    dispatch('editcard', {
+      id: listId,
+      card: {
+        ...card,
+        title,
+        description,
+      },
+    });
+
+    hide();
+  };
+
+  const handleDelete = () => {
+    dispatch('removecard', {
+      id: listId,
+      cardId: card.id,
+    });
+
+    hide();
+  };
 </script>
 
 <div class="modal" class:modal-open={!hidden}>
-  <div
-    class="modal-box bg-base-100"
-    use:clickOutside
-    on:click_outside={() => (hidden = true)}
-  >
+  <div class="modal-box bg-base-100" use:clickOutside on:click_outside={hide}>
     <div class="absolute top-5 right-5">
-      <button
-        class="btn btn-xs btn-circle btn-ghost"
-        on:click={() => (hidden = true)}
-      >
+      <button class="btn btn-xs btn-circle btn-ghost" on:click={hide}>
         <XLg />
       </button>
     </div>
@@ -55,7 +88,7 @@
 
     <div class="flex h-4">
       <h5 class="ml-6 text-xs">
-        in list {list}
+        in list {listTitle}
       </h5>
     </div>
 
@@ -67,14 +100,28 @@
     </div>
 
     <div class="mx-6">
-      <textarea class="textarea textarea-bordered w-full" />
+      <textarea
+        class="textarea textarea-bordered w-full"
+        bind:value={description}
+      />
     </div>
 
-    <div class="modal-action justify-start mt-2">
-      <button class="btn btn-sm btn-primary ml-6">Save</button>
-      <button class="btn btn-sm btn-ghost ml-6" on:click={() => (hidden = true)}
-        >Cancel</button
+    <div class="modal-action justify-between mt-2 mx-6">
+      <div>
+        <button class="btn btn-sm btn-primary" on:click={handleSave}
+          >Save</button
+        >
+        <button class="btn btn-sm btn-ghost" on:click={hide}>Cancel</button>
+      </div>
+
+      <button
+        class="btn btn-sm btn-error text-right"
+        on:click={() => (hideConfirm = false)}>Delete</button
       >
     </div>
   </div>
 </div>
+
+<Confirm bind:hidden={hideConfirm} on:click={handleDelete}
+  >Are you sure about deleting this card?</Confirm
+>

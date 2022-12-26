@@ -1,12 +1,34 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+
   import PlusLg from 'svelte-bootstrap-icons/lib/PlusLg.svelte';
 
   import { focus, clickOutside } from '../helpers/element';
 
+  export let listId;
+
+  const dispatch = createEventDispatcher();
+
   let showForm = false;
+  let title;
 
   const toggleShowForm = () => {
     showForm = !showForm;
+    title = '';
+  };
+
+  const handleAddCard = () => {
+    dispatch('addcard', {
+      id: listId,
+      card: {
+        id: +new Date(),
+        title: title,
+        description: '',
+      },
+    });
+
+    showForm = false;
+    title = '';
   };
 </script>
 
@@ -25,9 +47,10 @@
       class="textarea textarea-bordered textarea-ghost w-full mb-1"
       placeholder="To do..."
       use:focus
+      bind:value={title}
     />
     <div class="inline-block">
-      <button class="btn btn-primary">Add</button>
+      <button class="btn btn-primary" on:click={handleAddCard}>Add</button>
       <button class="btn btn-warning" on:click={toggleShowForm}>Cancel</button>
     </div>
   </form>

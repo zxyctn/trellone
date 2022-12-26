@@ -22,5 +22,6 @@
   <AddListForm
     on:click_outside={handleOutsideClick}
     on:click={handleOutsideClick}
+    on:addlist
   />
 {/if}

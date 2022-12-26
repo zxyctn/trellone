@@ -5,12 +5,14 @@
 
   import CardDetails from './CardDetails.svelte';
   import AddCard from './AddCard.svelte';
+  import List from './List.svelte';
 
-  export let list;
-  export let title = 'Test';
-  export let labels = ['in progress'];
-  export let description = 'testing';
-  export let checklists = [];
+  export let listTitle;
+  export let listId;
+  export let card;
+
+  // export let labels = ['in progress'];
+  // export let checklists = [];
   // export let comments;
 
   let editButtonHidden = true;
@@ -26,7 +28,7 @@
 </script>
 
 <div
-  class="card bg-base-100 shadow-xl cursor-pointer"
+  class="card bg-base-100 shadow-xl cursor-pointer mb-2"
   on:mouseenter={() => setEditButton(false)}
   on:mouseleave={() => setEditButton(true)}
   on:click={showCardDetails}
@@ -34,20 +36,27 @@
 >
   <div class="card-body justify-end">
     <div class="flex justify-between items-center">
-      <h2 class="card-title">{title}</h2>
+      <h2 class="card-title">{card.title}</h2>
       <button class:hidden={editButtonHidden === true}>
         <PencilFill />
       </button>
     </div>
     <div class="flex justify-start gap-1">
-      {#if description.length}
+      {#if card.description.length}
         <JustifyLeft />
       {/if}
-      {#if checklists.length}
+      <!-- {#if checklists.length}
         <Check2Square />
-      {/if}
+      {/if} -->
     </div>
   </div>
 </div>
 
-<CardDetails bind:hidden={hideCardDetails} bind:title {list} />
+<CardDetails
+  bind:hidden={hideCardDetails}
+  {listTitle}
+  {listId}
+  {card}
+  on:editcard
+  on:removecard
+/>
