@@ -3,7 +3,7 @@
   import JustifyLeft from 'svelte-bootstrap-icons/lib/JustifyLeft.svelte';
   import XLg from 'svelte-bootstrap-icons/lib/XLg.svelte';
 
-  import { clickOutside } from '../helpers/clickOutside';
+  import { clickOutside, focus } from '../helpers/element';
 
   export let hidden = true;
   export let title;
@@ -14,21 +14,13 @@
   const toggleTitleChangeForm = () => {
     showTitleChangeForm = !showTitleChangeForm;
   };
-
-  const handleOutsideClick = () => {
-    showTitleChangeForm = false;
-  };
-
-  const handleOutsideClickModal = () => {
-    hidden = true;
-  };
 </script>
 
 <div class="modal" class:modal-open={!hidden}>
   <div
     class="modal-box bg-base-100"
     use:clickOutside
-    on:click_outside={handleOutsideClickModal}
+    on:click_outside={() => (hidden = true)}
   >
     <div class="absolute top-5 right-5">
       <button
@@ -55,7 +47,8 @@
           class="input input-bordered input-ghost w-full max-w-xs font-bold text-xl h-7 p-0 m-0"
           bind:value={title}
           use:clickOutside
-          on:click_outside={handleOutsideClick}
+          use:focus
+          on:click_outside={() => (showTitleChangeForm = false)}
         />
       {/if}
     </div>

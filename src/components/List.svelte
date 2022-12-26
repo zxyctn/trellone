@@ -1,7 +1,7 @@
 <script>
   import Card from './Card.svelte';
   import AddCard from './AddCard.svelte';
-  import { clickOutside } from '../helpers/clickOutside';
+  import { clickOutside, focus } from '../helpers/element';
 
   export let title;
   export let cards;
@@ -11,10 +11,6 @@
   const toggleTitleChangeForm = () => {
     showTitleChangeForm = !showTitleChangeForm;
   };
-
-  const handleOutsideClick = () => {
-    showTitleChangeForm = false;
-  };
 </script>
 
 <div class="h-min  card bg-base-200 text-primary-content mr-5">
@@ -23,10 +19,11 @@
       <form>
         <input
           type="text"
-          class="input input-bordered input-ghost w-full max-w-xs"
+          class="input input-bordered input-ghost w-full max-w-xs card-title"
           bind:value={title}
           use:clickOutside
-          on:click_outside={handleOutsideClick}
+          use:focus
+          on:click_outside={() => (showTitleChangeForm = false)}
         />
       </form>
     {:else}

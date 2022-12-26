@@ -1,6 +1,8 @@
 <script>
   import PlusLg from 'svelte-bootstrap-icons/lib/PlusLg.svelte';
 
+  import { focus, clickOutside } from '../helpers/element';
+
   let showForm = false;
 
   const toggleShowForm = () => {
@@ -14,13 +16,18 @@
     <div class="ml-2">Add card</div>
   </button>
 {:else}
-  <form on:submit|preventDefault>
+  <form
+    on:submit|preventDefault
+    use:clickOutside
+    on:click_outside={() => (showForm = false)}
+  >
     <textarea
       class="textarea textarea-bordered textarea-ghost w-full mb-1"
       placeholder="To do..."
+      use:focus
     />
     <div class="inline-block">
-      <button class="btn btn-primary">Add card</button>
+      <button class="btn btn-primary">Add</button>
       <button class="btn btn-warning" on:click={toggleShowForm}>Cancel</button>
     </div>
   </form>
