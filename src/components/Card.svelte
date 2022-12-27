@@ -1,19 +1,12 @@
 <script>
   import PencilFill from 'svelte-bootstrap-icons/lib/PencilFill.svelte';
   import JustifyLeft from 'svelte-bootstrap-icons/lib/JustifyLeft.svelte';
-  import Check2Square from 'svelte-bootstrap-icons/lib/Check2Square.svelte';
 
   import CardDetails from './CardDetails.svelte';
-  import AddCard from './AddCard.svelte';
-  import List from './List.svelte';
 
   export let listTitle;
   export let listId;
   export let card;
-
-  // export let labels = ['in progress'];
-  // export let checklists = [];
-  // export let comments;
 
   let editButtonHidden = true;
   let hideCardDetails = true;
@@ -45,9 +38,6 @@
       {#if card.description.length}
         <JustifyLeft />
       {/if}
-      <!-- {#if checklists.length}
-        <Check2Square />
-      {/if} -->
     </div>
   </div>
 </div>

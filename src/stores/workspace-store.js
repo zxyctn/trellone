@@ -20,6 +20,16 @@ const workspace = writable([
 
 const workspaceStore = {
   subscribe: workspace.subscribe,
+  set: workspace.set,
+  setList: (list) => {
+    workspace.update((lists) => {
+      const listId = lists.findIndex((l) => l.id === list.id);
+
+      lists[listId] = { ...lists[listId], ...list };
+
+      return lists;
+    });
+  },
   addList: (list) => {
     workspace.update((lists) => [...lists, list]);
   },
