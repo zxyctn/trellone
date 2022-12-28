@@ -21,11 +21,34 @@ const workspace = writable([
 const workspaceStore = {
   subscribe: workspace.subscribe,
   set: workspace.set,
-  setList: (list) => {
+  setList: (list, dropped = false) => {
     workspace.update((lists) => {
-      const listId = lists.findIndex((l) => l.id === list.id);
+      const listIdx = lists.findIndex((l) => l.id === list.id);
+      const tmp = lists[listIdx];
 
-      lists[listId] = { ...lists[listId], ...list };
+      lists[listIdx] = { ...lists[listIdx], ...list };
+
+      if (dropped) {
+        tmp.cards.forEach((c) => {
+          if ('isDndShadowItem' in c && c.current !== lists[listIdx].title) {
+            const cardIdx = lists[listIdx].cards.findIndex(
+              (card) => card.id === c.id
+            );
+
+            lists[listIdx].cards[cardIdx].comments = [
+              {
+                message: `Moved this card from ${c.current} to ${lists[listIdx].title}`,
+                timestamp: new Date(),
+              },
+              ...c.comments,
+            ];
+
+            lists[listIdx].cards[cardIdx].current = lists[listIdx].title;
+          }
+        });
+      }
+
+      lists[listIdx].cards.forEach((c) => console.log(c.comments));
 
       return lists;
     });
@@ -38,11 +61,11 @@ const workspaceStore = {
   },
   addCard: (id, card) => {
     workspace.update((lists) => {
-      const listId = lists.findIndex((l) => l.id === id);
+      const listIdx = lists.findIndex((l) => l.id === id);
 
-      lists[listId] = {
-        ...lists[listId],
-        cards: [...lists[listId].cards, card],
+      lists[listIdx] = {
+        ...lists[listIdx],
+        cards: [...lists[listIdx].cards, card],
       };
 
       return lists;
@@ -50,11 +73,11 @@ const workspaceStore = {
   },
   removeCard: (id, cardId) => {
     workspace.update((lists) => {
-      const listId = lists.findIndex((l) => l.id === id);
+      const listIdx = lists.findIndex((l) => l.id === id);
 
-      lists[listId] = {
-        ...lists[listId],
-        cards: [...lists[listId].cards.filter((card) => card.id !== cardId)],
+      lists[listIdx] = {
+        ...lists[listIdx],
+        cards: [...lists[listIdx].cards.filter((card) => card.id !== cardId)],
       };
 
       return lists;
@@ -62,21 +85,21 @@ const workspaceStore = {
   },
   editCard: (id, card) => {
     workspace.update((lists) => {
-      const listId = lists.findIndex((l) => l.id === id);
+      const listIdx = lists.findIndex((l) => l.id === id);
 
-      const oldCardId = lists[listId].cards.findIndex((c) => c.id === card.id);
+      const oldCardId = lists[listIdx].cards.findIndex((c) => c.id === card.id);
       const oldCard = {
-        ...lists[listId].cards[oldCardId],
+        ...lists[listIdx].cards[oldCardId],
         ...card,
       };
-      lists[listId].cards[oldCardId] = oldCard;
+      lists[listIdx].cards[oldCardId] = oldCard;
       return lists;
     });
   },
   editTitle: (id, title) => {
     workspace.update((lists) => {
-      const listId = lists.findIndex((l) => l.id === id);
-      lists[listId] = { ...lists[listId], title: title };
+      const listIdx = lists.findIndex((l) => l.id === id);
+      lists[listIdx] = { ...lists[listIdx], title: title };
 
       return lists;
     });

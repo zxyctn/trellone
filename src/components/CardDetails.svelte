@@ -1,8 +1,10 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
+  import Time from 'svelte-time';
   import ViewList from 'svelte-bootstrap-icons/lib/ViewList.svelte';
   import JustifyLeft from 'svelte-bootstrap-icons/lib/JustifyLeft.svelte';
+  import ListUl from 'svelte-bootstrap-icons/lib/ListUl.svelte';
   import XLg from 'svelte-bootstrap-icons/lib/XLg.svelte';
 
   import Confirm from './Confirm.svelte';
@@ -77,7 +79,7 @@
       {:else}
         <input
           type="text"
-          class="input input-bordered input-ghost w-full max-w-xs font-bold text-xl h-7 p-0 m-0"
+          class="input input-bordered input-ghost w-full max-w-xs font-bold text-xl h-7 p-0 m-0 "
           bind:value={title}
           use:clickOutside
           use:focus
@@ -101,9 +103,29 @@
 
     <div class="mx-6">
       <textarea
-        class="textarea textarea-bordered w-full"
+        class="textarea textarea-bordered w-full h-56"
         bind:value={description}
       />
+    </div>
+
+    <br />
+
+    <div class="flex h-8 items-center">
+      <div class="w-6"><ListUl /></div>
+      <h2 class="font-semibold">Activity</h2>
+    </div>
+
+    <div class="mb-6">
+      {#each card.comments as comment (comment)}
+        <div class="flex mb-2 mx-6">
+          <div>
+            <p class="text-xs text-regular">{comment.message}</p>
+            <p class="text-xs text-gray-400">
+              <Time timestamp={comment.timestamp} live relative />
+            </p>
+          </div>
+        </div>
+      {/each}
     </div>
 
     <div class="modal-action justify-between mt-2 mx-6">

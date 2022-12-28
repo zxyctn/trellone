@@ -5,7 +5,7 @@
   import MoonStarsFill from 'svelte-bootstrap-icons/lib/MoonStarsFill.svelte';
   import SunFill from 'svelte-bootstrap-icons/lib/SunFill.svelte';
 
-  let darkMode = localStorage.theme === 'light';
+  let darkMode = localStorage.theme === 'cmyk';
 
   onMount(() => {
     themeChange(false);

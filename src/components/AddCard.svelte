@@ -6,6 +6,7 @@
   import { focus, clickOutside } from '../helpers/element';
 
   export let listId;
+  export let listTitle;
 
   const dispatch = createEventDispatcher();
 
@@ -24,6 +25,11 @@
         id: +new Date(),
         title: title,
         description: '',
+        createdAt: listTitle,
+        current: listTitle,
+        comments: [
+          { message: `Added this card to ${listTitle}`, timestamp: new Date() },
+        ],
       },
     });
 

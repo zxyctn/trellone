@@ -107,7 +107,7 @@
       {/each}
     </div>
     <div class="card-actions">
-      <AddCard listId={list.id} on:addcard />
+      <AddCard listTitle={list.title} listId={list.id} on:addcard />
     </div>
   </div>
 </div>

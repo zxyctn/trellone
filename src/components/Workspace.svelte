@@ -46,7 +46,7 @@
   };
 
   const handleListFinalize = (list) => {
-    workspace.setList(list);
+    workspace.setList(list, true);
   };
 </script>
 
